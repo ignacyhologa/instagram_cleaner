@@ -8,10 +8,11 @@ class InstagramDriver():
         self.username = username
         self.password = password
         self.driver = self.get_webdriver()
-        self._retrieve_cookies()
         self.complete_login()
+        self._retrieve_cookies()
 
     def get_all_followers(self):
+
         followers = {}
         self.driver.get('https://www.instagram.com/imperiumpiekna_atelier/')
         self.driver.find_element_by_xpath(
@@ -25,6 +26,8 @@ class InstagramDriver():
                    divs))[0]
         follower_list = follower_dialog.find_elements_by_tag_name("li")
 
+        # TODO retrieve all followers for account
+        # TODO implement scrolling until end of list
         for follower in follower_list:
             buttons = follower.find_elements_by_tag_name("button")
             remove_button = list(
@@ -98,11 +101,11 @@ class InstagramDriver():
         all_cookies = self.driver.get_cookies()
         session_id = list(
             filter(lambda cookie: cookie["name"] == "sessionid",
-                   all_cookies))[0]
+                   all_cookies))[0]["value"]
         self.headers = {
             "user-agent":
             "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36 Edg/87.0.664.57",
-            "cookie": f"sessionid={session_id.value};"
+            "cookie": f"sessionid={session_id};"
         }
 
     def close(self):

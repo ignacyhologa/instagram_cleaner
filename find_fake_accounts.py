@@ -1,7 +1,6 @@
+from typing import List
 from instascrape.scrapers.profile import Profile
 
-# TODO
-# TODO retrieve all followers for account
 # TODO scrape followers for basic data
 # TODO scrape followers for posts
 # TODO location
@@ -12,16 +11,15 @@ from instascrape.scrapers.profile import Profile
 
 
 def fake_accounts_filter(profile: Profile):
-    profile_conditions = (profile.is_verfied == False
-                          and profile.is_private == False and profile.posts < 7
-                          and profile.is_business_account == False
-                          and profile.followed_by_viewer == False
-                          and profile.followers <= 10
+    profile_conditions = (not profile.is_verfied and not profile.is_private
+                          and not profile.is_business_account
+                          and not profile.followed_by_viewer
+                          and profile.posts < 7 and profile.followers <= 10
                           and profile.following >= 100
                           and profile.followers / profile.following < 0.01)
     return profile_conditions
 
 
-def filter_fake_accounts(users):
+def filter_fake_accounts(users: List[Profile]):
     users = list(filter(fake_accounts_filter, users))
     return users
